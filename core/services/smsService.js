@@ -1,4 +1,5 @@
 const config = require('../../config/default.config.json');
+const { canSend, incrementUsage } = require('./usageService');
 
 const { exec } = require('child_process');
 const path = require('path');
@@ -35,11 +36,16 @@ async function sendSMS(phone, message, options = {}) {
   const sim = options.sim || 1;
 
   try {
-    await sendViaTermux(phone, message, sim);
+    if (!canSend(1)) {
+        return { success: false, error: 'Daily limit reached' };
+    }
 
-    logMessage(phone, message, 'sent');
+        await sendViaTermux(phone, message, sim);
 
-    return { success: true };
+        incrementUsage(1);
+        logMessage(phone, message, 'sent');
+
+        return { success: true };
 
   } catch (err) {
 

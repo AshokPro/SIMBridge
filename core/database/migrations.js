@@ -10,6 +10,14 @@ function runMigrations() {
     )
   `).run();
 
+  db.prepare(`
+  CREATE TABLE IF NOT EXISTS usage (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    date TEXT,
+    sent_count INTEGER DEFAULT 0
+  )
+  `).run();
+
   console.log('Database migrations completed.');
 }
 
