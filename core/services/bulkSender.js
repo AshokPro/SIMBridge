@@ -15,36 +15,19 @@ function applyTemplate(message, contact) {
   });
 }
 
+const { addToQueue } = require('./queueService');
+
 async function sendBulk(contactIds, message) {
-  const results = [];
   const contacts = getContactsByIds(contactIds);
 
   for (const contact of contacts) {
     const personalizedMessage = applyTemplate(message, contact);
-
-    const result = await sendSMS(contact.phone, personalizedMessage);
-
-    results.push({
-      contactId: contact.id,
-      phone: contact.phone,
-      status: result.success ? 'sent' : 'failed',
-      error: result.error || null
-    });
-
-    if (!result.success) {
-      if (result.error === 'Daily limit reached') {
-        break;
-      }
-    }
-
-    // Delay between messages (2 seconds default)
-    await delay(2000);
+    addToQueue(contact.id, contact.phone, personalizedMessage);
   }
 
   return {
-    totalRequested: contactIds.length,
-    totalProcessed: results.length,
-    results
+    totalQueued: contacts.length,
+    status: 'queued'
   };
 }
 

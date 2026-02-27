@@ -6,6 +6,7 @@ const config = require('../config/default.config.json');
 const contactsRoutes = require('./routes/contacts');
 const { sendSMS } = require('./services/smsService');
 const sendRoutes = require('./routes/send');
+const { processQueue } = require('./services/worker');
 
 const app = express();
 const PORT = 3000;
@@ -34,6 +35,7 @@ app.use('/send', sendRoutes);
 
 runMigrations();
 loadPlugins(app, pluginAPI);
+processQueue();
 
 app.listen(PORT, () => {
   console.log(`${config.appName} running on http://localhost:${PORT}`);

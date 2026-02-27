@@ -18,6 +18,18 @@ function runMigrations() {
   )
   `).run();
 
+  db.prepare(`
+  CREATE TABLE IF NOT EXISTS message_queue (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contact_id INTEGER,
+    phone TEXT,
+    message TEXT,
+    status TEXT DEFAULT 'pending',
+    error TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`).run();
+
   console.log('Database migrations completed.');
 }
 
