@@ -4,6 +4,7 @@ const pluginAPI = require('./pluginAPI');
 const runMigrations = require('./database/migrations');
 const config = require('../config/default.config.json');
 const contactsRoutes = require('./routes/contacts');
+const { sendSMS } = require('./services/smsService');
 
 const app = express();
 const PORT = 3000;
@@ -20,6 +21,11 @@ app.get('/health', (req, res) => {
     app: config.appName,
     version: require('../package.json').version
   });
+});
+
+app.get('/test-sms', async (req, res) => {
+  const result = await sendSMS('9999999999', 'Hello from SIMBridge');
+  res.json(result);
 });
 
 app.use('/contacts', contactsRoutes);

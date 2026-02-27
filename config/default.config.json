@@ -1,5 +1,6 @@
 {
   "appName": "SIMBridge",
   "dailyLimit": 100,
-  "defaultSim": 1
+  "defaultSim": 1,
+  "environment": "development"
 }
