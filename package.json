@@ -1,0 +1,23 @@
+{
+  "name": "simbridge",
+  "version": "0.1.0",
+  "description": "SIMBridge is an offline open-core SMS engine designed for small businesses.",
+  "main": "core/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node core/server.js",
+    "dev": "node core/server.js"
+  },
+  "keywords": [
+    "sms",
+    "offline-sms",
+    "business-messaging",
+    "open-core",
+    "termux"
+  ],
+  "author": "Ashok",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
