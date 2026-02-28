@@ -24,6 +24,15 @@ function updateStatus(id, status, error = null) {
   `).run(status, error, id);
 }
 
+function incrementRetry(id) {
+  db.prepare(`
+    UPDATE message_queue
+    SET retry_count = retry_count + 1,
+        status = 'pending'
+    WHERE id = ?
+  `).run(id);
+}
+
 module.exports = {
   addToQueue,
   getNextPending,

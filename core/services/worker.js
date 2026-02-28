@@ -1,6 +1,8 @@
 const { getNextPending, updateStatus } = require('./queueService');
 const { sendSMS, delay } = require('./smsService');
 
+const { incrementRetry } = require('./queueService');
+
 let isPaused = false;
 
 function pauseWorker() {
@@ -34,7 +36,12 @@ async function processQueue() {
     if (result.success) {
       updateStatus(job.id, 'sent');
     } else {
-      updateStatus(job.id, 'failed', result.error);
+      if (job.retry_count < 3 && result.error !== 'Daily limit reached') {
+        console.log(`Retrying job ${job.id}...`);
+        incrementRetry(job.id);
+      } else {
+        updateStatus(job.id, 'failed', result.error);
+}
     }
 
     await delay(2000);
