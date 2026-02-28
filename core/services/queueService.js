@@ -1,10 +1,10 @@
 const db = require('../database/db');
 
-function addToQueue(contactId, phone, message) {
+function addToQueue(contactId, phone, message, campaignId = null) {
   db.prepare(`
-    INSERT INTO message_queue (contact_id, phone, message)
-    VALUES (?, ?, ?)
-  `).run(contactId, phone, message);
+    INSERT INTO message_queue (contact_id, phone, message, campaign_id)
+    VALUES (?, ?, ?, ?)
+  `).run(contactId, phone, message, campaignId);
 }
 
 function getNextPending() {

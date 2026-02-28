@@ -3,7 +3,7 @@ const router = express.Router();
 const { sendBulk } = require('../services/bulkSender');
 
 router.post('/', async (req, res) => {
-  const { contactIds, message } = req.body;
+  const { contactIds, message, campaignName } = req.body;
 
   if (!Array.isArray(contactIds) || contactIds.length === 0) {
     return res.status(400).json({ error: 'contactIds required' });
@@ -14,7 +14,11 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const result = await sendBulk(contactIds, message);
+    const result = await sendBulk(
+  contactIds,
+  message,
+  campaignName || "Untitled Campaign"
+);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: 'Bulk sending failed' });

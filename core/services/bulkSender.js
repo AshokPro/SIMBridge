@@ -1,5 +1,6 @@
 const db = require('../database/db');
-const { sendSMS, delay } = require('./smsService');
+const { addToQueue } = require('./queueService');
+const { createCampaign } = require('./campaignService');
 const config = require('../../config/default.config.json');
 
 function getContactsByIds(ids) {
@@ -15,17 +16,19 @@ function applyTemplate(message, contact) {
   });
 }
 
-const { addToQueue } = require('./queueService');
 
-async function sendBulk(contactIds, message) {
+async function sendBulk(contactIds, message, campaignName = "Untitled Campaign") {
+  const campaignId = createCampaign(campaignName);
+
   const contacts = getContactsByIds(contactIds);
 
   for (const contact of contacts) {
     const personalizedMessage = applyTemplate(message, contact);
-    addToQueue(contact.id, contact.phone, personalizedMessage);
+    addToQueue(contact.id, contact.phone, personalizedMessage, campaignId);
   }
 
   return {
+    campaignId,
     totalQueued: contacts.length,
     status: 'queued'
   };

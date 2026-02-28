@@ -31,10 +31,27 @@ db.prepare(`
   )
 `).run();
 
+
 try {
   db.prepare(`
     ALTER TABLE message_queue
     ADD COLUMN retry_count INTEGER DEFAULT 0
+  `).run();
+} catch (e) {}
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS campaigns (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    status TEXT DEFAULT 'active',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`).run();
+
+try {
+  db.prepare(`
+    ALTER TABLE message_queue
+    ADD COLUMN campaign_id INTEGER
   `).run();
 } catch (e) {}
 
