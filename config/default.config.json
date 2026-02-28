@@ -2,5 +2,9 @@
   "appName": "SIMBridge",
   "dailyLimit": 100,
   "defaultSim": 1,
-  "environment": "development"
+  "environment": "development",
+  "delay": {
+    "base": 2000,
+    "variation": 1000
+  }
 }

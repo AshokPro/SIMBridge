@@ -55,6 +55,15 @@ async function sendSMS(phone, message, options = {}) {
   }
 }
 
+function getRandomDelay() {
+  const { base, variation } = config.delay;
+
+  const min = base - variation;
+  const max = base + variation;
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // Log messages into DB
 function logMessage(phone, message, status) {
   db.prepare(`
@@ -75,6 +84,7 @@ function logMessage(phone, message, status) {
 
 module.exports = {
   sendSMS,
-  delay
+  delay,
+  getRandomDelay
 };
 

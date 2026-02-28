@@ -1,5 +1,6 @@
 const { getNextPending, updateStatus } = require('./queueService');
-const { sendSMS, delay } = require('./smsService');
+const { sendSMS, delay, getRandomDelay } = require('./smsService');
+
 
 const { incrementRetry } = require('./queueService');
 
@@ -44,7 +45,9 @@ async function processQueue() {
 }
     }
 
-    await delay(2000);
+    const randomDelay = getRandomDelay();
+    console.log(`Waiting ${randomDelay}ms before next send...`);
+    await delay(randomDelay);
   }
 }
 
