@@ -7,6 +7,7 @@ const contactsRoutes = require('./routes/contacts');
 const { sendSMS } = require('./services/smsService');
 const sendRoutes = require('./routes/send');
 const { processQueue } = require('./services/worker');
+const usageRoutes = require('./routes/usage');
 
 const app = express();
 const PORT = 3000;
@@ -32,6 +33,7 @@ app.get('/test-sms', async (req, res) => {
 
 app.use('/contacts', contactsRoutes);
 app.use('/send', sendRoutes);
+app.use('/usage', usageRoutes);
 
 runMigrations();
 loadPlugins(app, pluginAPI);
